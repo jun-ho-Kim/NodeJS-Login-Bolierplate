@@ -7,6 +7,7 @@ const bodyPaser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const config = require('./config/key');
 
+const {auth} = require("./middleware/auth");
 const {User} = require("./models/User");
 
 app.use(bodyPaser.urlencoded({extended: true}));
@@ -19,7 +20,7 @@ mongoose.connect(config.mongoURI, {
     .catch(err => console.log(err))
 
 app.get('/', (req, res) => res.send('Hello World 안녕하세요~~~'));
-app.post('/register', (req,res) => {
+app.post('api/users/register', (req,res) => {
     //회원가입할 때 필요한 정보들을 client에 가져오면
     //그것들을 데이터베이스에 넣어준다.
     const user = new User(req.body);
@@ -50,9 +51,22 @@ app.post('api/users/login', (req, res) => {
                 .status(200)
                 .json({ loginSuccess: true, userId: user._id})
         })
-        
         })
     })
 })
+
+app.get('api/users/auth', auth, (req, res) => {
+    // 여기까지 미들웨어를 통과해왔다는 이야기는 Authentication이 true라는 말
+    res.status(200).json({
+        _id: req.user._id,
+        isAdmin: req.user.role === 0 ? false : true,
+        isAuth: true,
+        email: req.user.email,
+        name: req.user.name,
+        lastname: req.user.lastname,
+        role: user.role,
+        image: req.user.image
+    })
+});
 
 app.listen(port, () => console.log(`✅  Example app listening on port ${port}!`))

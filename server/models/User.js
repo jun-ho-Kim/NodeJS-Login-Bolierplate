@@ -72,6 +72,21 @@ userSchema.methods.generateToken = function(cb) {
         if(err) return cb(err);
         cb(null, user);
     })
+};
+
+userSchema.statics.findByToken = function(token, cb) {
+    var user = this;
+    // user._id + 'secretToken' = token;
+    //토큰을 jwt.verify()함수를 이용해 decode 한다.
+    jwt.verify(token, 'secretToken', function(err, decoded) {
+        //유저 아이디를 이용해서 유저를 찾은 다음에
+        //클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하는지 확인(verify 함수 사용)
+        user.findOne({_id: decoded, token}, function(err, user) {
+            //클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하면 user를 return
+            if(err) return cb(err);
+            cb(null, user);
+        })
+    })
 }
 
 
