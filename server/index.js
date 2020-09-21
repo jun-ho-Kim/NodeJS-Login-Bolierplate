@@ -4,12 +4,14 @@ const port = 3000;
 const mongoose = require('mongoose');
 const bodyPaser = require('body-parser');
 
+const cookieParser = require('cookie-parser');
 const config = require('./config/key');
 
 const {User} = require("./models/User");
 
 app.use(bodyPaser.urlencoded({extended: true}));
 app.use(bodyPaser.json());
+app.use(cookieParser());
 
 mongoose.connect(config.mongoURI, {
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
@@ -29,8 +31,9 @@ app.post('/register', (req,res) => {
     });
 });
 
-app.post('/login', (req, res) => {
+app.post('api/users/login', (req, res) => {
     User.findOne({email: req.body.email}, (err, user) => {
+        console.log('user',user);
         if(!user) {
             return res.json({
                 loginSuccess: false,
@@ -42,7 +45,10 @@ app.post('/login', (req, res) => {
             if(err) return res.json({loginSuccess: false, message: "비밀번호가 틀렸습니다."})
         //비밀번호 까지 맞다면 토큰 생성하기
         user.generateToken((err, user) => {
-        
+            if(err) return res.status(400).send(err);
+            res.cookie('x-auth', user.token)
+                .status(200)
+                .json({ loginSuccess: true, userId: user._id})
         })
         
         })
