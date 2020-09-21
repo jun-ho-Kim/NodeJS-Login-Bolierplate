@@ -20,7 +20,9 @@ mongoose.connect(config.mongoURI, {
     .catch(err => console.log(err))
 
 app.get('/', (req, res) => res.send('Hello World 안녕하세요~~~'));
+
 app.post('api/users/register', (req,res) => {
+    console.log('ping')
     //회원가입할 때 필요한 정보들을 client에 가져오면
     //그것들을 데이터베이스에 넣어준다.
     const user = new User(req.body);
@@ -68,5 +70,14 @@ app.get('api/users/auth', auth, (req, res) => {
         image: req.user.image
     })
 });
+
+app.get('/api/users/logout', auth, (req, res) => {
+    User.findOneAndUpdate({_id: req.user._id}, {token: ""}, (err, user) => {
+        if(err) return res.json({success: false, err});
+        return res.status(200).send({
+            success: true
+        })
+    })
+})
 
 app.listen(port, () => console.log(`✅  Example app listening on port ${port}!`))
