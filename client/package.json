@@ -1,8 +1,12 @@
 {
   "name": "client",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "dependencies": {
+    "antd": "^4.6.5",
+    "axios": "^0.18.1",
+    "http-proxy-middleware": "^1.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
@@ -14,14 +18,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jun-ho-Kim/NodeJS-Login-Bolierplate.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jun-ho-Kim/NodeJS-Login-Bolierplate/issues"
-  },
-  "homepage": "https://github.com/jun-ho-Kim/NodeJS-Login-Bolierplate#readme",
-  "description": ""
+  "license": "ISC"
 }

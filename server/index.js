@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 5000;
 const mongoose = require('mongoose');
 const bodyPaser = require('body-parser');
 
@@ -20,7 +20,7 @@ mongoose.connect(config.mongoURI, {
     .catch(err => console.log(err))
 
 app.get('/', (req, res) => res.send('Hello World 안녕하세요~~~'));
-
+app.get('/api/hello', (req,res) => res.send('Hello World'));
 app.post('api/users/register', (req,res) => {
     console.log('ping')
     //회원가입할 때 필요한 정보들을 client에 가져오면
